@@ -522,10 +522,8 @@ public class BukkitEventListener implements Listener {
                 String chatColor = ChatColor.getLastColors(replacedEmoji);
                 convertedCharacter = "§f" + strOneMoji + chatColor;
             }
-            System.out.println(strOneMoji);
             replacedEmoji += convertedCharacter;
         }
-        System.out.println(replacedEmoji);
         return replacedEmoji;
     }
 
