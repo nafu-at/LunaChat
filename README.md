@@ -1,7 +1,8 @@
-LunaChat
+LunaChatWithEmoji
 ========
 
-Build Status : [![Build Status](https://travis-ci.org/ucchyocean/LunaChat.svg?branch=master)](https://travis-ci.org/ucchyocean/LunaChat)
+LunaChatにEmojiを対応させたバージョンです。
+リリースは[ここ](https://github.com/tererun/LunaChatWithEmoji/releases/)からどうぞ
 
 チャンネルチャットプラグイン<br />
 <br />
