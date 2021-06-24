@@ -8,6 +8,8 @@ package com.github.ucchyocean.lc3.channel;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vdurmont.emoji.EmojiManager;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -171,8 +173,16 @@ public class BukkitChannel extends Channel {
         if ( format != null ) {
             format.replace("%msg", message);
             BaseComponent[] comps = format.makeTextComponent();
+            BaseComponent[] convertComps = new BaseComponent[comps.length];
+            for (int i = 0; i < comps.length; i++) {
+                BaseComponent component = comps[i];
+                String plainText = component.toLegacyText();
+                plainText = parseEmoji(plainText);
+                convertComps[i] = new TextComponent(plainText);
+            }
+
             for ( ChannelMember p : recipients ) {
-                p.sendMessage(comps);
+                p.sendMessage(convertComps);
             }
             message = format.toLegacyText();
         } else {
@@ -193,6 +203,32 @@ public class BukkitChannel extends Channel {
 
         // ロギング
         log(originalMessage, name);
+    }
+
+    private static String parseEmoji(String kanaTemp) {
+        String replacedEmoji = "";
+        String upperSurStart = "d800";
+        String upperSurEnd = "dbff";
+        for (int i = 0; i < kanaTemp.length() ; i++) {
+            int code = kanaTemp.charAt(i);
+            String hex = Integer.toHexString(code);
+            String strOneMoji = "";
+            if (hex.compareTo(upperSurStart)>=0 && hex.compareTo(upperSurEnd)<=0) {
+                strOneMoji = kanaTemp.substring(i,i+2);
+                i++;
+            } else {
+                strOneMoji = kanaTemp.substring(i,i+1);
+            }
+            String convertedCharacter = strOneMoji;
+            if (EmojiManager.isEmoji(strOneMoji)) {
+                String chatColor = org.bukkit.ChatColor.getLastColors(replacedEmoji);
+                convertedCharacter = "§f" + strOneMoji + chatColor;
+            }
+            System.out.println(strOneMoji);
+            replacedEmoji += convertedCharacter;
+        }
+        System.out.println(replacedEmoji);
+        return replacedEmoji;
     }
 
     /**
