@@ -50,7 +50,9 @@ public class VaultChatBridge {
      */
     public String getPlayerPrefix(Player player) {
         String prefix = chatPlugin.getPlayerPrefix(player);
-        return (prefix != null) ? prefix : "";
+        String result = prefix.contains("#") ? prefix.replace("&", "") : prefix;
+
+        return (prefix != null) ? result : "";
     }
 
     /**
