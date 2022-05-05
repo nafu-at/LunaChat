@@ -53,7 +53,7 @@ public class VaultChatBridge {
 
         //prefixに16進数カラーコードが使われている場合は&を削除
         //併用されている場合は非対応
-        String result = prefix.contains("#") ? prefix.replace("&", "") : prefix;
+        String result = prefix.contains("#") ? prefix.replace("&#", "#") : prefix;
 
         return (prefix != null) ? result : "";
     }
