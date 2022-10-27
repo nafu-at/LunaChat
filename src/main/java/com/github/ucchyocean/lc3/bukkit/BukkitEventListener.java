@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.vdurmont.emoji.EmojiManager;
+import com.vdurmont.emoji.EmojiParser;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -350,6 +352,9 @@ public class BukkitEventListener implements Listener {
                 skipJapanize = true;
             }
 
+            message = EmojiParser.parseToUnicode(message);
+            kanaTemp = EmojiParser.parseToUnicode(kanaTemp);
+
             // Japanize変換と、発言処理
             if ( !skipJapanize &&
                     LunaChat.getAPI().isPlayerJapanize(player.getName()) &&
@@ -425,6 +430,8 @@ public class BukkitEventListener implements Listener {
                     event.setFormat(Utility.replaceColorCode(f));
                 }
 
+                message = parseEmoji(message);
+
                 // 発言内容の設定
                 event.setMessage(message);
             }
@@ -494,6 +501,30 @@ public class BukkitEventListener implements Listener {
                 api.setDefaultChannel(player.getName(), cname);
             }
         }
+    }
+
+    private String parseEmoji(String kanaTemp) {
+        String replacedEmoji = "";
+        String upperSurStart = "d800";
+        String upperSurEnd = "dbff";
+        for (int i = 0; i < kanaTemp.length() ; i++) {
+            int code = kanaTemp.charAt(i);
+            String hex = Integer.toHexString(code);
+            String strOneMoji = "";
+            if (hex.compareTo(upperSurStart)>=0 && hex.compareTo(upperSurEnd)<=0) {
+                strOneMoji = kanaTemp.substring(i,i+2);
+                i++;
+            } else {
+                strOneMoji = kanaTemp.substring(i,i+1);
+            }
+            String convertedCharacter = strOneMoji;
+            if (EmojiManager.isEmoji(strOneMoji)) {
+                String chatColor = ChatColor.getLastColors(replacedEmoji);
+                convertedCharacter = "§f" + strOneMoji + chatColor;
+            }
+            replacedEmoji += convertedCharacter;
+        }
+        return replacedEmoji;
     }
 
     /**

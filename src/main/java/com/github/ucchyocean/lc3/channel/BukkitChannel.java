@@ -8,6 +8,8 @@ package com.github.ucchyocean.lc3.channel;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vdurmont.emoji.EmojiManager;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -171,6 +173,13 @@ public class BukkitChannel extends Channel {
         if ( format != null ) {
             format.replace("%msg", message);
             BaseComponent[] comps = format.makeTextComponent();
+            //BaseComponent[] convertComps = new BaseComponent[comps.length];
+            //for (int i = 0; i < comps.length; i++) {
+            //    BaseComponent component = comps[i];
+            //    String plainText = component.toLegacyText();
+            //    plainText = parseEmoji(plainText);
+            //    convertComps[i] = new TextComponent();
+            //}
             for ( ChannelMember p : recipients ) {
                 p.sendMessage(comps);
             }

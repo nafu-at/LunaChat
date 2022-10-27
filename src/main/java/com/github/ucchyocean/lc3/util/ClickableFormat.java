@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.vdurmont.emoji.EmojiManager;
 import org.jetbrains.annotations.Nullable;
 
 import com.github.ucchyocean.lc3.LunaChat;
@@ -225,6 +226,8 @@ public class ClickableFormat {
                 tc.setColor(last.getColor());
             }
 
+            tc.setText(parseEmoji(tc.getText()));
+
             components.add(tc);
 
             lastIndex = matcher.end();
@@ -240,6 +243,32 @@ public class ClickableFormat {
         BaseComponent[] result = new BaseComponent[components.size()];
         components.toArray(result);
         return result;
+    }
+
+    private static String parseEmoji(String kanaTemp) {
+        String replacedEmoji = "";
+        String upperSurStart = "d800";
+        String upperSurEnd = "dbff";
+        for (int i = 0; i < kanaTemp.length() ; i++) {
+            int code = kanaTemp.charAt(i);
+            String hex = Integer.toHexString(code);
+            String strOneMoji = "";
+            if (hex.compareTo(upperSurStart)>=0 && hex.compareTo(upperSurEnd)<=0) {
+                strOneMoji = kanaTemp.substring(i,i+2);
+                i++;
+            } else {
+                strOneMoji = kanaTemp.substring(i,i+1);
+            }
+            String convertedCharacter = strOneMoji;
+            if (EmojiManager.isEmoji(strOneMoji)) {
+                String chatColor = org.bukkit.ChatColor.getLastColors(replacedEmoji);
+                convertedCharacter = "§f" + strOneMoji + chatColor;
+            }
+            System.out.println(strOneMoji);
+            replacedEmoji += convertedCharacter;
+        }
+        System.out.println(replacedEmoji);
+        return replacedEmoji;
     }
 
     public String toLegacyText() {

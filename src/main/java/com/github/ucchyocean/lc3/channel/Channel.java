@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.vdurmont.emoji.EmojiManager;
+import com.vdurmont.emoji.EmojiParser;
 import org.jetbrains.annotations.Nullable;
 
 import com.github.ucchyocean.lc3.LunaChat;
@@ -293,6 +295,8 @@ public abstract class Channel {
                         kanaTemp.matches("[ \\uFF61-\\uFF9F]+") ) ) {
             skipJapanize = true;
         }
+
+        maskedMessage = EmojiParser.parseToUnicode(maskedMessage);
 
         // Japanize変換タスクを作成する
         boolean isIncludeSyncChat = true;
