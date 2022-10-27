@@ -2,7 +2,7 @@ LunaChatWithEmoji
 ========
 
 LunaChatにEmojiを対応させたバージョンです。
-リリースは[ここ](https://github.com/tererun/LunaChatWithEmoji/releases/)からどうぞ
+リリースは[ここ](./releases/)からどうぞ
 
 チャンネルチャットプラグイン<br />
 <br />
